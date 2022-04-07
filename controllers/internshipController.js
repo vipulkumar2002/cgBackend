@@ -1,18 +1,19 @@
 // Importing Models
+const catchAsyncErr = require("../middleware/catchAsyncErr");
 const Internship = require("../models/internshipModel");
+// const ErrorHander = require("../utils/errorHandler");
 
 //Create internships --- Admin
-exports.createInternship = async (req, res) => {
+exports.createInternship = catchAsyncErr(async (req, res) => {
   const internship = await Internship.create(req.body);
-
   res.status(201).json({
     massage: "internship Profile Created !",
     internship,
     success: true,
   });
-};
+});
 
-// All Interns --- User
+//get  All Interns --- User
 exports.getAllInternships = async (req, res) => {
   const internships = await Internship.find(req.body);
   res.status(200).json({

@@ -6,7 +6,7 @@ const {
   createInternship,
   updateIntrenship,
   deleteInternship,
-} = require("../controlles/internshipController");
+} = require("../controllers/internshipController");
 
 const router = express.Router();
 
