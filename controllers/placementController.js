@@ -1,37 +1,40 @@
 // Importing Models
 const catchAsyncErr = require("../middleware/catchAsyncErr");
 const Placement = require("../models/placementModel");
-// const ErrorHander = require("../utils/errorHandler");
+const ErrorHander = require("../utils/errorHandler");
 
-//Create internships --- Admin
+//Create Placement --- Admin
 exports.createPlacement = catchAsyncErr(async (req, res) => {
   const placement = await Placement.create(req.body);
   res.status(201).json({
-    massage: "placement Profile Created !",
+    message: "placement Profile Created !",
     placement,
     success: true,
   });
 });
 
 //get  All Placement --- User
-exports.getAllPlacements = async (req, res) => {
+exports.getAllPlacements = catchAsyncErr(async (req, res) => {
   const placements = await Placement.find(req.body);
   res.status(200).json({
-    massage: "All placements finds !",
+    message: "All placements finds !",
     placements,
     success: true,
   });
-};
+});
 
 //Update Placement Profile
-exports.updatePlacement = async (req, res) => {
+exports.updatePlacement = catchAsyncErr(async (req, res) => {
   let placement = await Placement.findById(req.params.id);
+
   if (!placement) {
-    return res.status(500).json({
-      massage: "Failed to find placement Profile !",
-      success: false,
-    });
+    return next(new ErrorHander("Failed to find placement Profile !", 404));
+    // return res.status(500).json({
+    //   massage: "Failed to find placement Profile !",
+    //   success: false,
+    // });
   }
+
   placement = await Placement.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -39,43 +42,46 @@ exports.updatePlacement = async (req, res) => {
   });
 
   res.status(200).json({
-    massage: "Placement Profile Updated !",
+    message: "Placement Profile Updated !",
     placement,
     success: true,
   });
-};
+});
 
 // Delete placement Profile
-exports.deletePlacement = async (req, res) => {
+exports.deletePlacement = catchAsyncErr(async (req, res) => {
   const placement = await Placement.findById(req.params.id);
   if (!placement) {
-    res.status(500).json({
-      massage: "Failed to find placement Profile !",
-      success: false,
-    });
+    return next(new ErrorHander("Failed to find placement Profile !", 404));
+    // res.status(500).json({
+    //   massage: "Failed to find placement Profile !",
+    //   success: false,
+    // });
   }
 
   await placement.remove();
 
   res.status(200).json({
-    massage: "placement Profile Deleted !",
+    message: "placement Profile Deleted !",
     success: true,
   });
-};
+});
 
 // Get Profile details
-exports.getProfileDetails = async (req, res) => {
+exports.getProfileDetails = catchAsyncErr(async (req, res, next) => {
   const placement = await Placement.findById(req.params.id);
 
   if (!placement) {
-    res.status(500).json({
-      massage: "Failed to find placement Profile !",
-      success: false,
-    });
+    return next(new ErrorHander("Failed to find placement Profile !", 404));
+    // res.status(500).json({
+    //   massage: "Failed to find placement Profile !",
+    //   success: false,
+    // });
   }
+
   res.status(200).json({
-    massage: "Details of placement ",
+    message: "Details of placement ",
     placement,
     success: true,
   });
-};
+});

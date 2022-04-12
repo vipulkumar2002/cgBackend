@@ -4,7 +4,11 @@ const catchAsyncErr = require("../middleware/catchAsyncErr");
 //Register a Admin
 exports.createAdmin = catchAsyncErr(async (req, res) => {
   const { userName, userId, password } = req.body;
-  const user = await User.create(req.body);
+  const user = await User.create({
+    userName,
+    userId,
+    password,
+  });
 
   res.status(201).json({
     massage: "User registered !",

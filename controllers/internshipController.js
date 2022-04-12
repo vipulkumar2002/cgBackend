@@ -1,6 +1,7 @@
 // Importing Models
 const catchAsyncErr = require("../middleware/catchAsyncErr");
 const Internship = require("../models/internshipModel");
+const ErrorHander = require("../utils/errorHandler");
 // const ErrorHander = require("../utils/errorHandler");
 
 //Create internships --- Admin
@@ -14,17 +15,17 @@ exports.createInternship = catchAsyncErr(async (req, res) => {
 });
 
 //get  All Interns --- User
-exports.getAllInternships = async (req, res) => {
+exports.getAllInternships = catchAsyncErr(async (req, res) => {
   const internships = await Internship.find(req.body);
   res.status(200).json({
     massage: "All internships finds !",
     internships,
     success: true,
   });
-};
+});
 
-//Update Intern Profile
-exports.updateIntrenship = async (req, res) => {
+//Update Intern Profilev -- Admin
+exports.updateIntrenship = catchAsyncErr(async (req, res) => {
   let internship = await Internship.findById(req.params.id);
   if (!internship) {
     return res.status(500).json({
@@ -43,10 +44,10 @@ exports.updateIntrenship = async (req, res) => {
     internship,
     success: true,
   });
-};
+});
 
 // Delete Intern Profile
-exports.deleteInternship = async (req, res) => {
+exports.deleteInternship = catchAsyncErr(async (req, res) => {
   const internship = await Internship.findById(req.params.id);
   if (!internship) {
     res.status(500).json({
@@ -61,21 +62,18 @@ exports.deleteInternship = async (req, res) => {
     massage: "Intern Profile Deleted !",
     success: true,
   });
-};
+});
 
 // Get Profile details
-exports.getProfileDetails = async (req, res) => {
+exports.getProfileDetails = catchAsyncErr(async (req, res, next) => {
   const internship = await Internship.findById(req.params.id);
 
   if (!internship) {
-    res.status(500).json({
-      massage: "Failed to find Intern Profile !",
-      success: false,
-    });
+    return next(new ErrorHander("Product Not Found", 404));
   }
   res.status(200).json({
     massage: "Details of Intern ",
     internship,
     success: true,
   });
-};
+});
