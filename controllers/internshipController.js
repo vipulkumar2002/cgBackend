@@ -1,8 +1,7 @@
 // Importing Models
 const catchAsyncErr = require("../middleware/catchAsyncErr");
 const Internship = require("../models/internshipModel");
-const ErrorHander = require("../utils/errorHandler");
-// const ErrorHander = require("../utils/errorHandler");
+const ErrorHandler = require("../utils/errorHandler");
 
 //Create internships --- Admin
 exports.createInternship = catchAsyncErr(async (req, res) => {
@@ -69,7 +68,7 @@ exports.getProfileDetails = catchAsyncErr(async (req, res, next) => {
   const internship = await Internship.findById(req.params.id);
 
   if (!internship) {
-    return next(new ErrorHander("Product Not Found", 404));
+    return next(new ErrorHandler("Product Not Found", 404));
   }
   res.status(200).json({
     massage: "Details of Intern ",
