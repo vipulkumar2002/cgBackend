@@ -1,0 +1,20 @@
+To check that ssh key generated or not  =>    "ls ~/.ssh"
+    If yes =>   "id_rsa  id_rsa.pub"
+    If No =>  "ls: cannot access '/c/Users/vipul/.ssh': No such file or directory"
+    
+To generate key => ssh-keygen -t rsa -b 4096 -C "your@gmail.com" 
+    and hit enters
+Now check that key is generated or not using  =>  "ls ~/.ssh"
+
+To start the ssh-agent in the background (in your local system)
+    =>  eval "$(ssh-agent -s)"
+    > Agent pid 59566
+Add your SSH private key to the ssh-agent
+    => ssh-add ~/.ssh/id_rsa
+
+To see public kay =>  "cat ~/.ssh/id_rsa.pub"
+
+Add the SSH key to your account on GitHub
+
+To know You've successfully authenticated or not 
+    =>  ssh -T git@github.com
